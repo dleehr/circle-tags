@@ -1,0 +1,44 @@
+version: 2
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test-3.6:
+          filters:
+            tags:
+              only: /.*/
+      - test-2.7:
+          filters:
+            tags:
+              only: /.*/
+  release:
+    jobs:
+      - release:
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
+          requires:
+            - test-3.6
+            - test-2.7
+jobs:
+  test-3.6: &test-template
+    docker:
+      - image: circleci/python:3.6
+    steps:
+      - run:
+          command: echo "Hello from Python 3.6"
+  test-2.7:
+    <<: *test-template
+    docker:
+      - image: circleci/python:2.7
+    steps:
+      - run:
+          command: echo "Hello from Python 2.7"
+  release:
+    docker:
+      - image: circleci/python:3.6
+    steps:
+      - run:
+          command: echo "Releasing from Python 3.6"
