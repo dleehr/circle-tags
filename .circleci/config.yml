@@ -3,14 +3,8 @@ workflows:
   version: 2
   test:
     jobs:
-      - test-3.6:
-          filters:
-            tags:
-              only: /.*/
-      - test-2.7:
-          filters:
-            tags:
-              only: /.*/
+      - test-3.6
+      - test-2.7
       - release:
           filters:
             tags:
